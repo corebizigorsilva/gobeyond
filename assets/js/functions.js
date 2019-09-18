@@ -1,6 +1,7 @@
 $(document).ready(function(){
     Menu.init();
     Banner.init();
+    Vitrine.init();
 });
 
 let Menu = {
@@ -76,13 +77,87 @@ let Banner = {
                 </div><!-- /.shell -->
             </div><!-- /.slide -->`
 
-            $('.slides').append(html);
+            $('.slides-banner').append(html);
 
         });
 
         sliderInit();
     }
 
+}
+
+let Vitrine  = {
+    init: function(){
+        this.getVitrine();
+    },
+    getVitrine: function(){
+        let _self = this;
+        $.get('http://localhost:5000/json/vitrine.json').then((response) =>{
+            _self.listVitrine(response);
+        });
+    },
+    listVitrine: function(items){
+        let _self = this;
+        let _htmlVitrines = items.map((item) => {
+            let skusAvailable = item.items.filter((sku) => {
+                if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){
+                    return sku;
+                }
+            });
+
+            let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
+            let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
+            let _html = `<div class="col col--1of3">
+                            <div class="product">
+                                <div class="product__image">
+                                    <a href="#">
+                                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
+                                    </a>
+                                </div><!-- /.product__image -->
+                        
+                                <div class="product__content">
+                                    <p>`+skusAvailable.length+` possibilidades</p>
+                        
+                                    <h3>
+                                        <a href="#">`+ price +`</a>
+                                    </h3>
+                        
+                                    <ul class="list-price">
+                                        <li>
+                                            <del>`+ listPrice +`</del>
+                                        </li>
+                        
+                                        <li>
+                                            <strong>`+ price +`</strong>
+                                        </li>
+                                    </ul><!-- /.list-price -->
+
+                                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
+                                                        
+                                </div><!-- /.product__content -->
+                            </div><!-- /.product -->
+                        </div><!-- /.col col-/-1of3 -->`;
+
+
+                        return _html;
+
+        });
+
+        $('.slide-vitrines').append(_htmlVitrines);
+
+    },
+    formatMoney: function(valor){
+       
+       valor = valor.toLocaleString('pt-BR', {
+
+           style: 'currency',
+           currency: 'BRL'
+
+        });
+        //console.log(valor);
+      return valor;
+
+    }
 }
 
 function sliderInit() {
@@ -129,7 +204,6 @@ function sliderInit() {
 }
 
 
-
 function imageZoom() {
     $('.product__zoom').each(function () {
         var $this = $(this);
@@ -149,3 +223,4 @@ function imageZoom() {
         });
     });
 }
+//Requisições ajax metodo POST
