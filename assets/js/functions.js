@@ -6,8 +6,6 @@ $(document).ready(function () {
 let Menu = {
     init: function () {
         this.getMenuItens();
-
-
     },
     getMenuItens: function () {
         let _self = this;
@@ -75,8 +73,8 @@ let Banner = {
                     <img src="assets/images/temp/slider-image1.jpg" alt="" class="hidden-xs hidden-sm">
 
                     <img src="assets/images/temp/slider-image1-mobile.jpg" alt="" class="hidden-md hidden-lg">
-                </div><!-- /.col col-/-1of2 -->
-            </div><!-- /.cols -->
+                    </div><!-- /.col col-/-1of2 -->
+                 </div><!-- /.cols -->
                  </div><!-- /.shell -->
                 </div><!-- /.slide -->`
 
@@ -129,9 +127,6 @@ function sliderInit() {
     });
     imageZoom();
 }
-
-
-
 function imageZoom() {
     $('.product__zoom').each(function () {
         var $this = $(this);
