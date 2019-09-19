@@ -4,6 +4,7 @@ $(document).ready(function () {
     Banner.init();
     Vitrine.init();
     Form.init();
+    FormContato.init();
 });
 let Menu = {
     init: function () {
@@ -179,8 +180,7 @@ let Form = {
             //console.log(email.length);
             _self.sendForm(email);
     },
-
-
+    
     sendForm:function(email){
         let body = {
             "email": email
@@ -196,7 +196,54 @@ let Form = {
         JSON.stringify(body)).then((retorno) => {
             console.log(retorno);
         });
-    }
+    },
+
+}
+
+let FormContato = {
+    init:function(){
+        let _self = this;
+
+        $('#form-contato').submit((evt) =>{
+            evt.preventDefault();
+            _self.validateFormContato();
+        });
+       
+    },
+    validateFormContato: function() {
+        let _self = this;
+
+        let email = $('#mail').val();
+        let name = $('#name').val();
+        let subject = $('#subject').val();
+        let message = $('message').val();
+
+        if(email.length == 0 || name.length == 0 || subject.length == 0){
+            $('.error').text("Todos os campos são obrigatórios");
+                return false;
+        }
+        
+        _self.sendFormContato(email, name, subject,message);
+    },
+
+    sendFormContato:function(email, name, subject, message){
+        let body = {
+            "email": email,
+            "name": name,
+            "subject": subject,
+            "message": message,
+        }
+        $.ajaxSetup({
+            headers: {
+                'Content-Type':'application/json',
+                'Accept':'application/vnd.vtex.ds.v10+json'
+            }
+        });
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', 
+        JSON.stringify(body)).then((retorno) => {
+            console.log(retorno);
+        });
+    },  
 }
 
 function sliderInit() {
