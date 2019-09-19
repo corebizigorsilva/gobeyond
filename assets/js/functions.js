@@ -197,7 +197,7 @@ let Form = {
             $('.error').text("O campo email é obrigatório");
             return false;
         }
-        _self.sendForm(email);
+        _self.sendForm(email)
     },
     sendForm: function (email) {
         let body = {
