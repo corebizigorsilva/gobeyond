@@ -1,18 +1,17 @@
 $(document).ready(function () {
-
     Menu.init();
     Banner.init();
-    vitrine.init();
-
-})
+    Vitrine.init();
+    Form.init();
+});
 
 let Menu = {
 
     init: function () {
         this.getMenuItens();
     },
-    getMenuItens: function () {
 
+    getMenuItens: function () {
         let _self = this;
 
         $.get('http://localhost:5000/json/menu.json').then((response) => {
@@ -24,25 +23,22 @@ let Menu = {
             $(".nav ul").append(test);
         })
     },
-    listMenuItem: function (tasty) {
 
+    listMenuItem: function (tasty) {
         let _self = this;
-        let _html = "<li><a href=''>" + tasty.name + "</a>";
+        let _html = "<li><a href='" + tasty.url + "'>" + tasty.name + "</a>";
 
         if (tasty.children.length > 0) {
             let _childHtml = tasty.children.map((cat) => {
                 return _self.listMenuItem(cat);
             });
 
-            _html += "<div class='nav__dropdown'><ul>" + _childHtml + "</ul></div>";
-
+            _html += "<div class='nav__dropdown'><ul>" + _childHtml + "</ul></div>"
         }
 
         _html += "</li>";
         return _html;
-
     }
-
 }
 
 let Banner = {
@@ -57,11 +53,8 @@ let Banner = {
         $.get('http://localhost:5000/json/banner.json').then((response) => {
             _self.listBanners(response);
         });
-
     },
-
     listBanners: function (banners) {
-
         banners.map((response) => {
             let html = `<div class="slide">
                 <div class="shell">
@@ -87,90 +80,121 @@ let Banner = {
             </div><!-- /.slide -->`
 
             $('.slides-banner').append(html);
+
         });
 
         sliderInit();
     }
 }
 
-let vitrine ={
-    init: function(){
-        
-    this.getvitrine();
-
+let Vitrine = {
+    init: function () {
+        this.getVitrine();
     },
-    getvitrine: function(){
+    getVitrine: function () {
         let _self = this;
-        $.get('http://localhost:5000/json/vitrine.json').then((response) =>{ //Está efetuando a busca da vitrine no local indicado
+        $.get('http://localhost:5000/json/vitrine.json').then((response) => {
             _self.listVitrine(response);
         });
     },
-
-    listVitrine: function(items){
-        //sku - variação
-        //sellers é a propria fila
+    listVitrine: function (items) {
         let _self = this;
 
         let _htmlVitrines = items.map((item) => {
             let skusAvailable = item.items.filter((sku) => {
-                if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){ //Condição para validação de busca na sku
+                if (sku.sellers[0].commertialOffer.AvailableQuantity > 0) {
                     return sku;
-                }              
+                }
             });
 
-            
-             let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
-             let listPrice =  _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
-           
+            let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
+            let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
+
             let _html = `<div class="col col--1of3">
-            <div class="product">
-                <div class="product__image">
-                    <a href="#">
-                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
-                    </a>
-                </div><!-- /.product__image -->
-        
-                <div class="product__content">
-                    <p>`+skusAvailable.length+` possibilidades</p>
-        
-                    <h3>
-                        <a href="#">`+ price +`</a>
-                    </h3>
-        
-                    <ul class="list-price">
-                        <li>
-                            <del>`+ listPrice +`</del>
-                        </li>
-        
-                        <li>
-                            <strong>`+ price +`</strong>
-                        </li>
-                    </ul><!-- /.list-price -->
+                            <div class="product">
+                                <div class="product__image">
+                                    <a href="#">
+                                        <img src="` + item.items[0].images[0].imageUrl + `" alt="">
+                                    </a>
+                                </div>                        
+                                <div class="product__content">
+                                    <p>` + skusAvailable.length + ` possibilidades</p>
+                                    <h3>
+                                        <a href ="#"> ` + price + ` </a>
+                                    </h3>
+                        
+                                    <ul class="list-price">
+                                        <li>
+                                            <del> ` + listPrice + ` </del>
+                                        </li>
+                        
+                                        <li>
+                                            <strong> ` + price + ` </strong>
+                                        </li>
+                                    </ul>
 
-                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
-                                        
-                </div><!-- /.product__content -->
-            </div><!-- /.product -->
-        </div><!-- /.col col-/-1of3 -->`;
+                                    <a href="` + skusAvailable[0].sellers[0].addToCartLink + `" target="_blank"> Comprar </a>
+                                </div>
+                            </div>
+                        </div>`;
 
-        return _html;
+            return _html;
         });
 
         $('.slide-vitrines').append(_htmlVitrines);
-
     },
-    formatMoney: function(valor){
-       
-         valor = valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
-         return valor;
-        
-        
+
+
+    formatMoney: function (valor) {
+
+        return valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
     }
 }
 
+let Form = {
+    init: function () {
+        let _self = this;
 
+        $('#form-newsletter').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+        });
+    },
+    validateForm: function () {
+        let _self = this;
+        let email = $('#mail').val();
 
+        if (email.length == 0) {
+            $('.error').text("O campo email é obrigatório");
+            return false;
+        }
+        _self.sendForm(email);
+    },
+    sendForm: function (email) {
+        let body = {
+            "email": email
+        }
+
+        $.ajaxSetup({
+            header: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vtex.ds.v10+json'
+            }
+        });
+
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents'
+            , JSON.stringify(body))
+            .then((retorno) => {
+                console.log(retorno);
+            });
+
+    }
+}
 
 function sliderInit() {
     $('.slider .slides').slick({
