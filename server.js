@@ -4,4 +4,6 @@ var connect = require('connect'),
 var app = connect();
 
 app.use(serveStatic("./"));
-app.listen(5000);
+app.listen(5000, ()=>{
+    console.log("server rodando em localhost:5000")
+});
