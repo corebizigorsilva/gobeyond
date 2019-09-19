@@ -3,6 +3,7 @@ $(document).ready(function () {
     Banner.init();
     Vitrine.init();
     Form.init();
+    Contato.init();
 });
 
 let Menu = {
@@ -213,6 +214,58 @@ let Form = {
 
     }
 
+}
+
+let Contato = {
+    init: function () {
+        let _self = this;
+
+        $('#form-contato').submit((evt) => {
+            evt.preventDefault();
+            _self.validateContato();
+        });
+    },
+    validateContato: function () {
+        let _self = this;
+        let email = $('#mail').val();
+        let name = $('#name').val();
+        let subject = $('#subject').val();
+        let message = $('#message').val();
+
+        if (email.length == 0){
+            $('.error1').text("O campo email é obrigatório");
+            return false;      
+        }else{
+            if (name.length == 0){
+                $('.error2').text("O campo nome é obrigatório");
+                return false;
+            }if (subject.length == 0){
+                $('.error3').text("O campo assunto é obrigatório");
+                return false;
+            }
+        }
+        
+        _self.sendContato(email, name, subject, message);
+    },
+    sendContato: function (email, name, subject, message) {
+        let body = {
+            "email": email,
+            "name": name,
+            "subject": subject,
+            "message": message
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vtex.ds.v10+json'
+            }
+        });
+
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body)).then((retorno) => {
+            console.log(retorno);
+        });
+    }
 }
 
 function sliderInit() {
