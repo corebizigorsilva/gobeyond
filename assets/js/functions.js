@@ -2,6 +2,7 @@ $(document).ready(function(){
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
 });
 
 let Menu= {
@@ -157,6 +158,27 @@ let Vitrine = {
     },
     formatMoney: function(valor){
         return Number(valor).toLocaleString('pt-br' , { style:'currency', currency:'BRL'});
+    }
+}
+
+let Form = {
+    init: function(){
+        let _self = this;
+
+        $('#form-newsletter').submit((evt) =>{
+            evt.preventDefault();
+            _self.validadeForm();
+        });      
+        
+    },
+    validadeForm: function(){
+        let _self = this;
+        let email = $('#mail').val();
+
+        console.log()
+    },
+    sendForm: function(){
+
     }
 }
 
