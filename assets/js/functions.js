@@ -1,15 +1,16 @@
-$(document).ready(function(){
+$(document).ready(function () {
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
 });
 
 let Menu = {
-    
-    init: function(){
+
+    init: function () {
         this.getMenuItens();
     },
-    getMenuItens: function(){
+    getMenuItens: function () {
         let _self = this;
         $.get('http://localhost:5000/json/menu.json').then((response) => {
             let test = response.map((category) => {
@@ -19,12 +20,12 @@ let Menu = {
             $(".nav ul").append(test);
         })
     },
-    listMenuItem: function(tasty){
+    listMenuItem: function (tasty) {
         let _self = this;
-        let _html = "<li><a href='" + tasty.url + "'>"+ tasty.name + "</a>";
+        let _html = "<li><a href='" + tasty.url + "'>" + tasty.name + "</a>";
 
 
-        if(tasty.children.length >0){
+        if (tasty.children.length > 0) {
             let _childHtml = tasty.children.map((cat) => {
                 return _self.listMenuItem(cat);
             });
@@ -37,18 +38,18 @@ let Menu = {
 }
 
 let Banner = {
-    init: function(){
-        let _self= this;
+    init: function () {
+        let _self = this;
         _self.getBanners();
     },
-    getBanners: function(){
+    getBanners: function () {
         let _self = this;
 
         $.get('http://localhost:5000/json/banner.json').then((response) => {
             _self.listBanners(response);
         });
     },
-    listBanners: function(banners){
+    listBanners: function (banners) {
         banners.map((response) => {
             let html = `<div class="slide">
                 <div class="shell">
@@ -76,17 +77,17 @@ let Banner = {
             $('.slides-banner').append(html);
 
         });
-        sliderInit();   
+        sliderInit();
     }
 }
 
-let Vitrine={
-    init: function(){
+let Vitrine = {
+    init: function () {
         this.getVitrine();
     },
-    getVitrine: function(){
+    getVitrine: function () {
         let _self = this;
-        $.get('http://localhost:5000/json/vitrine.json').then((response) =>{
+        $.get('http://localhost:5000/json/vitrine.json').then((response) => {
             _self.listVitrine(response);
         });
     },
@@ -94,57 +95,95 @@ let Vitrine={
         let _self = this;
 
         let _htmlVitrines = items.map((item) => {
-            let skusAvailable = item.items.filter((sku) =>{
-                if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){
+            let skusAvailable = item.items.filter((sku) => {
+                if (sku.sellers[0].commertialOffer.AvailableQuantity > 0) {
                     return sku;
                 }
 
             });
             let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
-            let listPrice =_self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
+            let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
 
             let _html = `<div class="col col--1of3">
                             <div class="product">
                                 <div class="product__image">
                                     <a href="#">
-                                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
+                                        <img src="`+ item.items[0].images[0].imageUrl + `" alt="">
                                     </a>
                                 </div><!-- /.product__image -->
                         
                                 <div class="product__content">
-                                    <p>`+skusAvailable.length+` possibilidades</p>
+                                    <p>`+ skusAvailable.length + ` possibilidades</p>
                         
                                     <h3>
-                                        <a href="#">`+ price +`</a>
+                                        <a href="#">`+ price + `</a>
                                     </h3>
                         
                                     <ul class="list-price">
                                         <li>
-                                            <del>`+ listPrice +`</del>
+                                            <del>`+ listPrice + `</del>
                                         </li>
                         
                                         <li>
-                                            <strong>`+ price +`</strong>
+                                            <strong>`+ price + `</strong>
                                         </li>
                                     </ul><!-- /.list-price -->
 
-                                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
+                                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink + `" target="_blank"> Comprar </a>
                                                         
                                 </div><!-- /.product__content -->
                             </div><!-- /.product -->
                         </div><!-- /.col col-/-1of3 -->`;
 
 
-                        return _html;
+            return _html;
         });
 
         $('.slide-vitrines').append(_htmlVitrines);
     },
-    formatMoney: function(valor){
+    formatMoney: function (valor) {
         let _transfer = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         return _transfer;
     }
-	
+
+}
+
+let Form = {
+    init: function () {
+        let _self = this;
+
+        $('#form-newsletter').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+        });
+    },
+    validateForm: function () {
+        let _self = this;
+        let email = $('#mail').val();
+
+        if (email.length == 0) {
+            $('.error').text("O campo email é obrigatório");
+            return false;
+        }
+
+        _self.sendForm(email);
+    },
+    sendForm: function (email) {
+        let body = {
+            "email": email
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vtex.ds.v10+json'
+            }
+        });
+
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body)).then((retorno) => {
+            console.log(retorno);
+        });
+    }
 }
 
 function sliderInit() {
