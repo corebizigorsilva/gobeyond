@@ -1,8 +1,11 @@
+//Diferenças let, var = let há a possibilidade do arquivo ser dinâmico, já o var, estático
+
 $(document).ready(function () {
     //Chama as outras funcões
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
 });
 
 let Menu = {
@@ -24,11 +27,13 @@ let Menu = {
                 return retorno;
 
             });
-            //Coloca o html gerado na fu
+            //Coloca o html gerado na função abaixo na classe ou id do html
             $(".nav ul").append(test);
         })
     },
 
+    //na função abaixo será verificado se há herança nos arrays e caso sim, os lista e executa a propria função
+    //aqui é aplicado de fato a recursividade.
 
     listMenuItem: function (tasty) {
         let _self = this;
@@ -56,7 +61,7 @@ let Banner = {
     },
     getBanners: function () {
         let _self = this;
-
+        //Aqui é uma simulação de como seria pegar uma informação de uma API
         $.get("http://localhost:5000/json/banner.json").then((response) => {
             _self.listBanners(response);
         });
@@ -105,6 +110,9 @@ let Vitrine = {
 
         });
     },
+
+    //na função abaixo será verificado se há disponibilidade do produto, e quais são suas respectivas skus
+    //skus são variáveis de um produto core
     listVitrine: function (items) {
         let _self = this;
 
@@ -123,41 +131,89 @@ let Vitrine = {
             <div class="product">
                 <div class="product__image">
                     <a href="#">
-                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
+                        <img src="`+ item.items[0].images[0].imageUrl + `" alt="">
                     </a>
                 </div><!-- /.product__image -->
         
                 <div class="product__content">
-                    <p>`+skusAvailable.length+` possibilidades</p>
+                    <p>`+ skusAvailable.length + ` possibilidades</p>
         
                     <h3>
-                        <a href="#">`+ price +`</a>
+                        <a href="#">`+ price + `</a>
                     </h3>
         
                     <ul class="list-price">
                         <li>
-                            <del>`+ listPrice +`</del>
+                            <del>`+ listPrice + `</del>
                         </li>
         
                         <li>
-                            <strong>`+ price +`</strong>
+                            <strong>`+ price + `</strong>
                         </li>
                     </ul><!-- /.list-price -->
 
-                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
+                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink + `" target="_blank"> Comprar </a>
                                         
                 </div><!-- /.product__content -->
             </div><!-- /.product -->
         </div><!-- /.col col-/-1of3 -->`;
             return _html;
-    });
-    $('.slide-vitrines').append(_htmlVitrines);
+        });
+        $('.slide-vitrines').append(_htmlVitrines);
     },
-    formatMoney: function(valor){
-        let _transfer = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
+
+    //Na função abaixo será convertida o padrão monetario para o especificado, no caso, BRL
+    formatMoney: function (valor) {
+        let _transfer = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         return _transfer;
     }
 }
+
+let Form = {
+    init: function () {
+        let _self = this;
+        //Evento ao enviar
+        //Prevent default nao deixa o usuario ser redirecionado.
+        $('#form-newsletter').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+        });
+
+    },
+    //Nao deixa o email ser vazio, e caso seja interrompe a função
+    validateForm: function () {
+        let _self = this;
+        let email = $('#mail').val();
+
+        if (email.length == 0) {
+            $('.error').text("O campo email é obrigatorio");
+            return false;
+        }
+        _self.sendForm(email);
+    },
+
+    //Aqui de fato é usado o metodo post para enviar o OBJETO para o servidor da Vtex
+    sendForm: function (email) {
+        let body = {
+            "email": email
+        }
+
+        $.ajaxSetup({
+            //Define o tipo de conteudo enviado e o tipo que aceita resposta
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vtex.ds.v10+json'
+            }
+        });
+        //Servidor no qual será enviado o arquivo Json
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body))
+            .then((retorno) => {
+                alert("Conteudo enviado"); 
+            });
+    }
+
+}
+
 function sliderInit() {
     $('.slider .slides').slick({
         dots: true,
