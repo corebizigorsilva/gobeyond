@@ -2,6 +2,7 @@ $(document).ready(function () {
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
 });
 
 let Menu = {
@@ -51,25 +52,10 @@ let Banner = {
 
         $.get('http://localhost:5000/json/banner.json').then((response) => {
             _self.listBanners(response);
-<<<<<<< HEAD
-<<<<<<< HEAD
-           
-        });
-    },
-    listBanners: function(banner){
-        banner.map((response) => {
-=======
-        });
-    },
-    listBanners: function(banners){
-        banners.map((response) => {
->>>>>>> origin/jp
-=======
         });
     },
     listBanners: function (banners) {
         banners.map((response) => {
->>>>>>> origin/marjori_corebiz
             let html = `<div class="slide">
                 <div class="shell">
                     <div class="cols">
@@ -93,42 +79,6 @@ let Banner = {
                 </div><!-- /.shell -->
             </div><!-- /.slide -->`
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            $('.slides').append(html);
-        });
-        
-    sliderInit();
-    }
-
-}
- 
-=======
-            $('.slides-banner').append(html);
-
-        });
-        sliderInit();
-    }
-    
-}
-
-let Vitrine = {
-    init: function(){
-        this.getVitrine();
-    },
-    getVitrine: function(){
-       let _self = this;
-       $.get('http://localhost:5000/json/vitrine.json').then((response) => {
-           _self.listVitrine(response);
-       });
-
-    },
-    listVitrine: function(items){
-        let _self = this;
-        let _htmlVitrines = items.map((item) => {
-            let skusAvailable = item.items.filter((sku) =>{
-                if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){
-=======
             $('.slides-banner').append(html);
 
         });
@@ -153,33 +103,17 @@ let Vitrine = {
         let _htmlVitrines = items.map((item) => {
             let skusAvailable = item.items.filter((sku) => {
                 if (sku.sellers[0].commertialOffer.AvailableQuantity > 0) {
->>>>>>> origin/marjori_corebiz
                     return sku;
                 }
             });
 
             let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
-<<<<<<< HEAD
-            let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.listPrice);
-=======
             let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
->>>>>>> origin/marjori_corebiz
 
             let _html = `<div class="col col--1of3">
                             <div class="product">
                                 <div class="product__image">
                                     <a href="#">
-<<<<<<< HEAD
-                                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
-                                    </a>
-                                </div><!-- /.product__image -->
-                        
-                                <div class="product__content">
-                                    <p>`+skusAvailable.length+` possibilidades</p>
-                    
-                                    <h3>
-                                        <a href="#">`+ price +`</a>
-=======
                                         <img src="` + item.items[0].images[0].imageUrl + `" alt="">
                                     </a>
                                 </div>                        
@@ -187,44 +121,10 @@ let Vitrine = {
                                     <p>` + skusAvailable.length + ` possibilidades</p>
                                     <h3>
                                         <a href ="#"> ` + price + ` </a>
->>>>>>> origin/marjori_corebiz
                                     </h3>
                         
                                     <ul class="list-price">
                                         <li>
-<<<<<<< HEAD
-                                            <del>`+ listPrice +`</del>
-                                        </li>
-                        
-                                        <li>
-                                            <strong>`+ price +`</strong>
-                                        </li>
-                                    </ul><!-- /.list-price -->
-
-                                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
-                                                        
-                                </div><!-- /.product__content -->
-                            </div><!-- /.product -->
-                        </div><!-- /.col col-/-1of3 -->`;
-
-
-
-                        return _html;
-
-
-
-                        
-        });
-
-        $('.slide-vitrines').append(_htmlVitrines);
-
-    },
-    formatMoney: function(valor){
-        return Number(valor).toLocaleString('pt-br' , { style:'currency', currency:'BRL'});
-    }
-}
->>>>>>> origin/jp
-=======
                                             <del> ` + listPrice + ` </del>
                                         </li>
                         
@@ -279,7 +179,42 @@ let Vitrine = {
 
     }
 }
->>>>>>> origin/marjori_corebiz
+
+let Form = {
+    init: function () {
+        let _self = this;
+
+        $('#form-newsletter').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+        });
+    },
+    validateForm: function () {
+        let _self = this;
+        let email = $('#mail').val();
+
+        if (email.length == 0){
+            $('.error').text("O campo email é obrigatório");
+            return false;
+        }
+        _self.sendForm(email);
+    },
+    sendForm: function (email) {
+        let body = {
+        "email": email
+    }
+    $.ajaxSetup({
+        headers:{
+            'Content-type': 'application/json',
+            'Accept': 'application/vnd.vtex.ds.v10+json',
+        }
+    });
+            $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body))
+            .then((retorno) => {
+                console.log(retorno);
+            });
+        }
+}
 
 function sliderInit() {
     $('.slider .slides').slick({
@@ -324,11 +259,6 @@ function sliderInit() {
     imageZoom();
 }
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> origin/marjori_corebiz
 function imageZoom() {
     $('.product__zoom').each(function () {
         var $this = $(this);
@@ -347,8 +277,4 @@ function imageZoom() {
             }
         });
     });
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/marjori_corebiz
