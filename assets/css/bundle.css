@@ -2309,7 +2309,7 @@ input:-webkit-autofill {
     display: inline !important; }
   .visible-lg-inline-block {
     display: inline-block !important; } }
-/* ------------------------------------------------------------ *\ 
+/* ------------------------------------------------------------ *\
 	# Icons
 \* ------------------------------------------------------------ */
 [class^="ico-"] {
@@ -6428,3 +6428,29 @@ nav ol {
   overflow: hidden; }
 
 /*# sourceMappingURL=bundle.css.map */
+
+
+.form-contato{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+}
+.send-contact .section__body{
+    width: 100%!important;
+    margin-top: 20px;
+}
+
+
+.send-contact .subscribe__field{
+    width: 50%;
+    margin-top: 20px;
+}
+
+#message{
+    height: 100px;
+    margin-bottom: 100px;
+}
