@@ -1,59 +1,57 @@
-$(document).ready(function(){
+$(document).ready(function () {
     Menu.init();
     Banner.init();
     Vitrine.init();
 });
 
-let Menu= {
-    init: function(){
+let Menu = {
+
+    init: function () {
         this.getMenuItens();
     },
-    getMenuItens: function(){
+
+    getMenuItens: function () {
         let _self = this;
 
-        $.get('http://localhost:5000/json/menu.json').then((response) => { 
+        $.get('http://localhost:5000/json/menu.json').then((response) => {
             let test = response.map((category) => {
                 let retorno = _self.listMenuItem(category);
                 return retorno;
             });
 
             $(".nav ul").append(test);
-
         })
     },
-    listMenuItem: function(tasty){
+
+    listMenuItem: function (tasty) {
         let _self = this;
-        let _html = "<li><a href='"+ tasty.url + "'>" + tasty.name + "</a>";
+        let _html = "<li><a href='" + tasty.url + "'>" + tasty.name + "</a>";
 
-        if(tasty.children.length > 0){
-            let _childHtml = tasty.children.map((cat) =>{
-
-                return _self.listMenuItem(cat);   
-
+        if (tasty.children.length > 0) {
+            let _childHtml = tasty.children.map((cat) => {
+                return _self.listMenuItem(cat);
             });
 
-            _html +="<div class='nav__dropdown'><ul>" + _childHtml + "</ul></div>"
+            _html += "<div class='nav__dropdown'><ul>" + _childHtml + "</ul></div>"
         }
 
         _html += "</li>";
         return _html;
     }
-
 }
 
-let Banner={
-    init: function(){
-
+let Banner = {
+    init: function () {
         let _self = this;
 
         _self.getBanners();
-
     },
-    getBanners: function(){
+    getBanners: function () {
         let _self = this;
 
         $.get('http://localhost:5000/json/banner.json').then((response) => {
             _self.listBanners(response);
+<<<<<<< HEAD
 <<<<<<< HEAD
            
         });
@@ -66,6 +64,12 @@ let Banner={
     listBanners: function(banners){
         banners.map((response) => {
 >>>>>>> origin/jp
+=======
+        });
+    },
+    listBanners: function (banners) {
+        banners.map((response) => {
+>>>>>>> origin/marjori_corebiz
             let html = `<div class="slide">
                 <div class="shell">
                     <div class="cols">
@@ -89,6 +93,7 @@ let Banner={
                 </div><!-- /.shell -->
             </div><!-- /.slide -->`
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             $('.slides').append(html);
         });
@@ -123,17 +128,48 @@ let Vitrine = {
         let _htmlVitrines = items.map((item) => {
             let skusAvailable = item.items.filter((sku) =>{
                 if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){
+=======
+            $('.slides-banner').append(html);
+
+        });
+
+        sliderInit();
+    }
+}
+
+let Vitrine = {
+    init: function () {
+        this.getVitrine();
+    },
+    getVitrine: function () {
+        let _self = this;
+        $.get('http://localhost:5000/json/vitrine.json').then((response) => {
+            _self.listVitrine(response);
+        });
+    },
+    listVitrine: function (items) {
+        let _self = this;
+
+        let _htmlVitrines = items.map((item) => {
+            let skusAvailable = item.items.filter((sku) => {
+                if (sku.sellers[0].commertialOffer.AvailableQuantity > 0) {
+>>>>>>> origin/marjori_corebiz
                     return sku;
                 }
             });
 
             let price = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.Price);
+<<<<<<< HEAD
             let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.listPrice);
+=======
+            let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
+>>>>>>> origin/marjori_corebiz
 
             let _html = `<div class="col col--1of3">
                             <div class="product">
                                 <div class="product__image">
                                     <a href="#">
+<<<<<<< HEAD
                                         <img src="`+item.items[0].images[0].imageUrl+`" alt="">
                                     </a>
                                 </div><!-- /.product__image -->
@@ -143,10 +179,20 @@ let Vitrine = {
                     
                                     <h3>
                                         <a href="#">`+ price +`</a>
+=======
+                                        <img src="` + item.items[0].images[0].imageUrl + `" alt="">
+                                    </a>
+                                </div>                        
+                                <div class="product__content">
+                                    <p>` + skusAvailable.length + ` possibilidades</p>
+                                    <h3>
+                                        <a href ="#"> ` + price + ` </a>
+>>>>>>> origin/marjori_corebiz
                                     </h3>
                         
                                     <ul class="list-price">
                                         <li>
+<<<<<<< HEAD
                                             <del>`+ listPrice +`</del>
                                         </li>
                         
@@ -178,6 +224,62 @@ let Vitrine = {
     }
 }
 >>>>>>> origin/jp
+=======
+                                            <del> ` + listPrice + ` </del>
+                                        </li>
+                        
+                                        <li>
+                                            <strong> ` + price + ` </strong>
+                                        </li>
+                                    </ul>
+
+                                    <a href="` + skusAvailable[0].sellers[0].addToCartLink + `" target="_blank"> Comprar </a>
+                                </div>
+                            </div>
+                        </div>`;
+
+            return _html;
+        });
+
+        $('.slide-vitrines').append(_htmlVitrines);
+    },
+
+    // Eugenio
+    //formatMoney: function (valor) {
+    //     valor = `R$ ${parseFloat(valor).toFixed(2).replace(".", ",")}`;
+    //     return valor;
+    // }
+
+    //João
+    // formatMoney: function (valor) {
+    //     valor = valor.toLocaleString('pt-BR', {
+    //         style: 'currency',
+    //         currency: 'BRL'
+    //     });
+    //     return valor
+    // }
+
+    //Gabrielly
+    // formatMoney: function (valor) {
+    //     valor = "R$ " + valor.toFixed(2).replace(".", ",");
+    //     return valor;
+    // }
+
+    //Priscila
+    // formatMoney: function (valor) {
+    //     return 'R$' + valor.toFixed(2);
+    // }
+
+    formatMoney: function (valor) {
+
+        return valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+    }
+}
+>>>>>>> origin/marjori_corebiz
 
 function sliderInit() {
     $('.slider .slides').slick({
@@ -222,8 +324,11 @@ function sliderInit() {
     imageZoom();
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/marjori_corebiz
 function imageZoom() {
     $('.product__zoom').each(function () {
         var $this = $(this);
@@ -242,4 +347,8 @@ function imageZoom() {
             }
         });
     });
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/marjori_corebiz
