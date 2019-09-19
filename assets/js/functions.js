@@ -2,6 +2,8 @@ $(document).ready(function(){
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
+    FormContato.init();
 });
 
 let Menu = {
@@ -10,29 +12,28 @@ let Menu = {
     },
     getMenuItens: function(){
         let _self = this;
-
+        
         $.get('http://localhost:5000/json/menu.json').then((response) => {
-            let test = response.map((category) => {
+            let test = response.map( (category) => {
                 let retorno = _self.listMenuItem(category);
                 return retorno;
             });
-
-            $(".nav ul").append(test);
+            
+            $('.nav ul').append(test);        
         });
     },
     listMenuItem: function(tasty){
         let _self = this;
-        let _html = "<li><a href='" + tasty.url + "'>" + tasty.name + "</a>";
+        let _html = "<li><a href='"+ tasty.url +"'>" + tasty.name + "</a>";
 
-        if(tasty.children.length >0) {
+        if(tasty.children.length > 0){
             let _childHtml = tasty.children.map((cat) => {
                 return _self.listMenuItem(cat);
             });
-
-            _html += "<div class='nav__dropdown'><ul>" + _childHtml + "</ul></div>"
+            _html += "<div class='nav__dropdown'><ul>"+ _childHtml+ "</ul></div>"
         }
-
         _html += "</li>";
+
         return _html;
     }
 }
@@ -85,9 +86,9 @@ let Banner = {
 
 let Vitrine = {
     init: function(){
-    this.getVitrine();
+        this.getVitrine();
     },
-    getVitrine: function() {
+    getVitrine: function(){
         let _self = this;
         $.get('http://localhost:5000/json/vitrine.json').then((response) => {
             _self.listVitrine(response);
@@ -95,10 +96,10 @@ let Vitrine = {
     },
     listVitrine: function(items){
         let _self = this;
-
+        
         let _htmlVitrines = items.map((item) => {
             let skusAvailable = item.items.filter((sku) => {
-                if (sku.sellers[0].commertialOffer.AvailableQuantity > 0) {
+                if(sku.sellers[0].commertialOffer.AvailableQuantity > 0){
                     return sku;
                 }
             });
@@ -107,52 +108,141 @@ let Vitrine = {
             let listPrice = _self.formatMoney(skusAvailable[0].sellers[0].commertialOffer.ListPrice);
             
             let _html = `<div class="col col--1of3">
-                            <div class="product">
-                                <div class="product__image">
-                                    <a href="#">
-                                        <img src="`+item.items[0].images[0].imageUrl+`" alt="">
-                                    </a>
-                                </div><!-- /.product__image -->
-                        
-                                <div class="product__content">
-                                    <p>`+skusAvailable.length+` possibilidades</p>
-                        
-                                    <h3>
-                                        <a href="#">`+ price +`</a>
-                                    </h3>
-                        
-                                    <ul class="list-price">
-                                        <li>
-                                            <del>`+ listPrice +`</del>
-                                        </li>
-                        
-                                        <li>
-                                            <strong>`+ price +`</strong>
-                                        </li>
-                                    </ul><!-- /.list-price -->
+                        <div class="product">
+                            <div class="product__image">
+                                <a href="#">
+                                    <img src="`+item.items[0].images[0].imageUrl+`" alt="">
+                                </a>
+                            </div><!-- /.product__image -->
+                    
+                            <div class="product__content">
+                                <p>`+skusAvailable.length+` possibilidades</p>
+                    
+                                <h3>
+                                    <a href="#">`+ price +`</a>
+                                </h3>
+                    
+                                <ul class="list-price">
+                                    <li>
+                                        <del>`+ listPrice +`</del>
+                                    </li>
+                    
+                                    <li>
+                                        <strong>` + price +`</strong>
+                                    </li>
+                                </ul><!-- /.list-price -->
 
-                                    <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
-                                                        
-                                </div><!-- /.product__content -->
-                            </div><!-- /.product -->
-                        </div><!-- /.col col-/-1of3 -->`;
+                                <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a>
+                                                    
+                            </div><!-- /.product__content -->
+                        </div><!-- /.product -->
+                    </div><!-- /.col col-/-1of3 -->`;
 
-                        return _html;
-        });
-
-        $('.slide-vitrines').append(_htmlVitrines);
+            return _html;
+        }); 
+        $('.slide-vitrines').append(_htmlVitrines);  
     },
     formatMoney: function(valor){
-        valor = valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-        return valor;
+        // valor = `R$ ${parseFloat(valor).toFixed(2).replace(".", ",")}`;
+        // return valor;
+        return valor.toLocaleString('pt-BR',{
+            style: 'currency',
+            currency: 'BRL'
+        });
     }
-    // formatMoney: function(valor) {
-
-    //     valor = "R$ " + valor.toFixed(2).replace("." , ",");
-    //     return valor;
-    // }
 }
 
+let Form = {
+    init: function(){
+        let _self = this;
+
+        $('#form-newsletter').submit((evt)=>{
+            evt.preventDefault();
+
+            _self.validateForm();
+        });
+    },
+    validateForm: function(){
+        let _self = this;
+
+        let email = $("#mail").val();
+
+        if(email.length == 0 ){
+            $(".error").text('O campo Email é obrigatorio');
+            return false;
+        }
+        _self.sendForm(email);
+    },
+    sendForm: function(email){
+        let body = {
+            "email": email
+        }
+        $.ajaxSetup({
+           headers: {
+               'Content-Type': 'application/json',
+               'Accept': 'application/vnd.vtex.ds.v10+json'
+           } 
+        });
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body))
+        .then((retorno)=>{
+           console.log(retorno);
+        });
+    },
+}
+
+let FormContato = {
+    init: function(){
+        let _self = this;
+
+        $('#form-contato').submit((evt)=>{
+            evt.preventDefault();
+
+            _self.validateForm();
+        });
+    },
+    validateForm: function(){
+        let _self = this;
+
+        let email = $("#mail").val();
+        let name = $("#name").val();
+        let subject = $("#subject").val();
+        let message = $("#message").val();
+
+        console.log(email);
+        console.log(name);
+        console.log(subject);
+        console.log(message);
+
+        if(email.length == 0 || name.length == 0 || subject.length == 0){
+            $(".error").text('O campos campos Email, Nome e Assunto são obrigatorios');
+            return false;
+        }
+        _self.sendForm(email, name, subject, message);
+    },
+    sendForm: function(email, name, subject, message){
+        let body = {
+            "email": email,
+            "name":name,
+            "subject":subject,
+            "message":message
+        }
+        $.ajaxSetup({
+           headers: {
+               'Content-Type': 'application/json',
+               'Accept': 'application/vnd.vtex.ds.v10+json'
+           } 
+        });
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
+        .then((retorno)=>{
+           console.log(retorno);
+           email = "";
+           name =  "";
+           subject = "";
+           message = "";
+           alert("Formulario enviado com sucesso");
+        });
+    },
+}
 function sliderInit() {
     $('.slider .slides').slick({
         dots: true,
