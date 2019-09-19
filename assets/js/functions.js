@@ -3,6 +3,7 @@ $(document).ready(function () {
     Banner.init();
     Vitrine.init();
     Form.init();
+    contato.init();
 });
 
 let Menu = {
@@ -180,27 +181,54 @@ let Vitrine = {
     }
 }
 
-let Form = {
+
+let contato = {
     init: function () {
         let _self = this;
-        $('#form-newsletter').submit((evt) => {
+        $('#form-contato').submit((evt) => {
             evt.preventDefault();
-            _self.validateForm();
+            _self.validatecontato();
         });
     },
-    validateForm: function () {
+    validatecontato: function () {
         let _self = this;
         let email = $('#mail').val();
+        let name = $('#name').val();
+        let assunto = $('#subject').val();
+        let texto = $('#text').val();
+
         if (email.length == 0) {
             $('.error').text("O campo email é obrigatório");
             return false;
         }
-        _self.sendForm(email);
-    },
-    sendForm: function (email) {
-        let body = {
-            "email": email
+
+        if (name.length == 0) {
+            $('.error').text("O campo nome é obrigatório");
+            return false;
         }
+
+        if (assunto.length == 0) {
+            $('.error').text("O campo assunto é obrigatório");
+            return false;
+        }
+
+        if (texto.length == 0) {
+            $('.error').text("O campo assunto é obrigatório");
+            return false;  
+        }
+
+        _self.sendcontato(email, name, assunto, texto);
+    },
+    sendcontato: function(email, name, assunto, texto) {
+        let body = {
+            "email": email,
+            "nome" : nome,
+            "assunto" : assunto,
+            "texto" : texto
+            
+        }
+
+        
         $.ajaxSetup({
             header: {
                 'Content-Type': 'application/json',
@@ -214,6 +242,8 @@ let Form = {
             });
     }
  }
+
+
 
 function sliderInit() {
     $('.slider .slides').slick({
