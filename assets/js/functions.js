@@ -2,10 +2,12 @@
 
 $(document).ready(function () {
     //Chama as outras funcões
+    //SEMPRE COLOCAR AS FUNÇÔES AQUI PARA INICIAREM QUANDO O DOCUMENTO ABRIR!!!
     Menu.init();
     Banner.init();
     Vitrine.init();
     Form.init();
+    FormEmail.init();
 });
 
 let Menu = {
@@ -213,6 +215,87 @@ let Form = {
     }
 
 }
+
+
+
+let FormEmail = {
+    init: function () {
+        let _self = this;
+        //Evento ao enviar
+        //Prevent default nao deixa o usuario ser redirecionado.
+        $('#form-contato').submit((env) => {
+            env.preventDefault();
+            _self.validateFormEmail();
+        });
+
+    },
+    //Nao deixa o email ser vazio, e caso seja interrompe a função
+    validateFormEmail: function () {
+        let _self = this;
+        let email = $('#mail').val();
+        let nome = $('#name').val();
+        let assunto = $('#subject').val();
+        let mensagem = $('#message').val();
+
+        
+
+        if (email.length == 0) {
+            $('.error').text("O campo email é obrigatorio");
+            return false;
+        }else{
+            if(nome.length == 0){
+                $('.error').text("O campo nome é obrigatório");
+                return false;
+            }else{
+                if(assunto.length == 0){
+                    $('.error').text("O campo assunto é obrigatório");
+                    return false;
+                }
+            }
+        
+        }
+        _self.sendFormEmail(email, nome, assunto, mensagem);
+    },
+
+    //Aqui de fato é usado o metodo post para enviar o OBJETO para o servidor da Vtex
+    sendFormEmail: function (email, nome, assunto, mensagem) {
+        let body = {
+            "email": email,
+            "name": nome,
+            "subject": assunto,
+            "message": mensagem
+        }
+
+        $.ajaxSetup({
+            //Define o tipo de conteudo enviado e o tipo que aceita resposta
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vtex.ds.v10+json'
+            }
+        });
+        //Servidor no qual será enviado o arquivo Json
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
+            .then((retorno) => {
+                alert("Enviado com sucesso!!");
+            });
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function sliderInit() {
     $('.slider .slides').slick({
