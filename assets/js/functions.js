@@ -3,6 +3,7 @@ $(document).ready(function () {
     Banner.init();
     Vitrine.init();
     Form.init();
+    contato.init();
 });
 
 let Menu = {
@@ -156,6 +157,44 @@ let Vitrine = {
     }
 }
 
+let contato = {
+    init: function () {
+        let _self = this;
+
+        $('.form-contato').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+        });
+    },
+    validateForm: function () {
+        let _self = this;
+        let email = $('#mail')
+        let nome = $('#name')
+        let assunto = $('#subject')
+
+        let substract = $('.subscribe__field');
+
+        substract.each((element) => {
+
+            if (element.val().length == 0) {
+
+                if (email.length == 0) {
+                    $('.error').text("O campo email é obrigatório");
+                } elseif(nome.length == 0){
+                    $('.error').text("O campo nome é obrigatório");
+                } elseif()
+
+                return false;
+            }
+
+        });
+    },
+    sendForm: function () {
+        let _self = this;
+
+    }
+}
+
 let Form = {
     init: function () {
         let _self = this;
@@ -194,7 +233,13 @@ let Form = {
             });
 
     }
+
+
+
 }
+
+
+
 
 function sliderInit() {
     $('.slider .slides').slick({
