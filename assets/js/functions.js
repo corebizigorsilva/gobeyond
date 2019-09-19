@@ -165,26 +165,43 @@ let Form = {
     init: function(){
         let _self = this;
 
-        $('#form-newsletter').submit((evt) =>{
+        $('#form-contato').submit((evt) =>{
             evt.preventDefault();
             _self.validateForm();
         });      
-        
     },
     validateForm: function(){
         let _self = this;
         let email = $('#mail').val();
+        let name = $('#name').val();
+        let subject = $('#subject').val();
+        let message = $('#message').val();
 
         if (email.length == 0){
             $('.error').text("O campo email é obrigatório");
             return false;
         }
+        if (name.length == 0){
+            $('.error').text("O campo nome é obrigatório");
+            return false;
+        }
+        if (subject.length == 0){
+            $('.error').text("O campo assunto é obrigatório");
+            return false;
+        }
+        if (message.length == 0){
+            $('.error').text("O campo mensagem é obrigatório");
+            return false;
+        }
 
-        _self.sendForm(email);
+        _self.sendForm(email, name, subject, message);
     },
-    sendForm: function(email){
+    sendForm: function(email, name, subject, message){
         let body = {
-            "email": email
+            "email" : email,
+            "name" : name , 
+            "subject": subject,
+            "message": message
         }
         $.ajaxSetup({
             headers:{
@@ -193,7 +210,7 @@ let Form = {
             }
 
         });
-        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body))
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
             .then((retorno) => {
             console.log(retorno);
         });
