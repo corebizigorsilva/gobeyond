@@ -3,6 +3,7 @@ $(document).ready(function(){
 Menu.init();
 Banner.init();
 Vitrine.init();
+Form.init();
 });
 
 let Menu = {
@@ -165,6 +166,51 @@ let Vitrine ={
 
     }
 
+
+}
+
+let Form ={
+    init: function(){
+        let _self = this;
+
+        $('#form-newsletter').submit((evt) => {
+            evt.preventDefault();
+            _self.validateForm();
+
+        });
+
+    },
+    validateForm: function(){
+        let _self = this;
+        let email = $('#mail').val();
+
+        if (email.length == 0){
+            $('.error').text("O campo email é obrigatório");
+            return false;
+        }
+
+        _self.sendForm(email);
+
+    },
+    sendForm: function(email){
+       let body = {
+           "email": email
+       }
+
+
+       $.ajaxSetup({
+            headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/vnd.vtex.ds.v10+json'
+            }
+       });
+
+       $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body)).then((retorno) => {
+           console.log(retorno);
+            
+       });
+    }
+    
 
 }
 
