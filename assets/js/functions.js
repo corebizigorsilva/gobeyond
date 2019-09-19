@@ -3,6 +3,7 @@ $(document).ready(function () {
     Menu.init();
     Banner.init();
     Vitrine.init();
+    Form.init();
 });
 let Menu = {
     init: function () {
@@ -150,10 +151,51 @@ let Vitrine = {
     },
 
     formatMoney:function(valor){
-       valor = valor.toLocaleString('pt-BR', {
-style:'currency',
-currency: 'BRL'
+       return valor.toLocaleString('pt-BR', {
+        style:'currency',
+        currency: 'BRL'
        });
+    }
+}
+
+let Form = {
+    init:function(){
+        let _self = this;
+
+        $('#form-newsletter').submit((evt) =>{
+            evt.preventDefault();
+            _self.validateForm(); // poderia chamar usando o this - this.validadeForm()
+        });
+       
+    },
+    validateForm: function() {
+        let _self = this;
+        let email = $('#mail').val();
+
+        if(email.length == 0){
+            $('.error').text("O campo e-mail é obrigatório");
+            return false;
+        }
+            //console.log(email.length);
+            _self.sendForm(email);
+    },
+
+
+    sendForm:function(email){
+        let body = {
+            "email": email
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'Content-Type':'application/json',
+                'Accept':'application/vnd.vtex.ds.v10+json'
+            }
+        });
+        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', 
+        JSON.stringify(body)).then((retorno) => {
+            console.log(retorno);
+        });
     }
 }
 
