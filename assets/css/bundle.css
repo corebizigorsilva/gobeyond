@@ -177,6 +177,9 @@ audio:not([controls]) {
 /**
  * Remove the border on images inside links in IE 10-.
  */
+ #mail, #name, #subject, #message{
+   background-color: #e6e6e6;
+ }
 img {
   border-style: none; }
 /**
@@ -6439,6 +6442,16 @@ nav ol {
 
     width: 100%;
 }
+.error1, .error2, .error{
+  color: red;
+}
+.form-contato input:focus{
+  border-bottom: dodgerblue 2px solid;
+}
+.form-contato textarea:focus{
+  border-bottom: dodgerblue 2px solid;
+}
+
 .send-contact .section__body{
     width: 100%!important;
     margin-top: 20px;

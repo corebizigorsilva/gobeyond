@@ -22,7 +22,7 @@ let Menu = {
     getMenuItens: function () {
         let _self = this;
 
-        //Pega o caminho do "template" e faz um looping para listar cada categoria ou departamento do menu
+        //Pega o caminho do "API" e faz um looping para listar cada categoria ou departamento do menu
         $.get('http://localhost:5000/json/menu.json').then((response) => {
             let test = response.map((category) => {
                 let retorno = _self.listMenuItem(category);
@@ -211,6 +211,7 @@ let Form = {
         $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/GB/documents', JSON.stringify(body))
             .then((retorno) => {
                 alert("Conteudo enviado"); 
+                console.log(retorno);
             });
     }
 
@@ -241,14 +242,24 @@ let FormEmail = {
 
         if (email.length == 0) {
             $('.error').text("O campo email é obrigatorio");
+            $(".error").show();
+            $(".error1").hide();
+            $(".error2").hide();
             return false;
         }else{
             if(nome.length == 0){
-                $('.error').text("O campo nome é obrigatório");
+             //   $('.error').text("O campo nome é obrigatório");
+                $('.error1').text("O campo nome é obrigatório");
+                $(".error").hide();
+                $(".error1").show();
+                $(".error2").hide();
                 return false;
             }else{
                 if(assunto.length == 0){
-                    $('.error').text("O campo assunto é obrigatório");
+                    $('.error2').text("O campo assunto é obrigatório");
+                    $(".error").hide();
+                    $(".error1").hide();
+                    $(".error2").show();
                     return false;
                 }
             }
@@ -276,14 +287,28 @@ let FormEmail = {
         //Servidor no qual será enviado o arquivo Json
         $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
             .then((retorno) => {
-                alert("Enviado com sucesso!!");
+               // alert("Enviado com sucesso!!");
+                console.log(retorno);
+                $('.enviado').text("Contato enviado com sucesso!");
             });
     }
 
 }
 
+// if (email.length == 0){
+//     $('.error').text("O campo email é obrigatório");
 
+//     return false;      
+// }else{
+//     if (name.length == 0){
 
+//         return false;
+//     }if (subject.length == 0){
+//         $('.error2').text("O campo assunto é obrigatório");
+
+//         return false;
+//     }
+// }
 
 
 

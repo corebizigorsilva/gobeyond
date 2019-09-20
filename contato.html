@@ -16,7 +16,9 @@
 <style>
     .logo img {
         width: 150px;
+
     }
+
 </style>
 
 <body>
@@ -330,21 +332,22 @@
                 <div class="subscribe">
                     <form action="?" method="post" id="form-contato" class="form-contato">
 
-                        <input type="email" id="mail" name="mail" value="" placeholder="E-mail" class="subscribe__field">
+                        <input type="email" id="mail" name="mail" value=""  placeholder="E-mail" class="subscribe__field">
+                        <div class="error"></div>
 
-                        <input type="text" id="name" name="name" value="" placeholder="Nome" class="subscribe__field">
-
+                        <input type="text" id="name" name="name" value="" maxlength="50" placeholder="Nome" class="subscribe__field">
+                        <div class="error1"></div>
                         <input type="text" id="subject" name="name" value="" placeholder="Assunto" class="subscribe__field">
-
+                        <div class="error2"></div>
                         <textarea type="text" id="message" name="name" value="" placeholder="Mensagem" class="subscribe__field"></textarea>
-
+                        
                         <button type="submit" class="btn subscribe__btn">
                             <span>CADASTRAR</span>
 
                             <i class="ico-dot"></i>
                         </button>
 
-                        <div class="error">
+                        <div class="enviado">
 
                         </div>
                     </form>
