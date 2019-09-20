@@ -1,4 +1,4 @@
-$(document).ready(function(){
+ $(document).ready(function(){
     Menu.init();
     Banner.init();
     Vitrine.init();
@@ -178,23 +178,25 @@ let Form = {
         let message = $('#message').val();
 
         if (email.length == 0){
-            $('.error').text("O campo email é obrigatório");
+            $('.error_email').text("O campo email é obrigatório");
             return false;
         }
         if (name.length == 0){
-            $('.error').text("O campo nome é obrigatório");
+            $('.error_nome').text("O campo nome é obrigatório");
             return false;
         }
         if (subject.length == 0){
-            $('.error').text("O campo assunto é obrigatório");
+            $('.error_assunto').text("O campo assunto é obrigatório");
             return false;
         }
         if (message.length == 0){
-            $('.error').text("O campo mensagem é obrigatório");
+            $('.error_message').text("O campo mensagem é obrigatório");
             return false;
         }
 
         _self.sendForm(email, name, subject, message);
+
+
     },
     sendForm: function(email, name, subject, message){
         let body = {

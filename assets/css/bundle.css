@@ -6454,3 +6454,20 @@ nav ol {
     height: 100px;
     margin-bottom: 100px;
 }
+.error_nome{
+  font-size:12px;
+  color:red;
+}
+.error_email{
+  font-size:12px;
+  color:red;
+}
+.error_assunto{
+  font-size:12px;
+  color:red;
+}
+.error_message{
+  font-size:12px;
+  color:red;
+}
+
