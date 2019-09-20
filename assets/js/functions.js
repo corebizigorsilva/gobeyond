@@ -200,14 +200,26 @@
             let name = $("#name").val();
             let subject = $("#subject").val();
             let message = $("#message").val();
-
-            console.log(email);
-            console.log(name);
-            console.log(subject);
-            console.log(message);
-
+            
+            
             if(email.length == 0 || name.length == 0 || subject.length == 0){
-                $(".error").text('O campos campos Email, Nome e Assunto são obrigatorios');
+                if(email != ""){
+                	$("div.email").hide();
+                }else{
+                    $("div.email").text('O digite seu email');
+                }
+                if(name != ""){
+                	$("div.name").hide();
+                }
+                else{
+                    $("div.name").text('O digite seu nome');
+                }
+                if(subject != ""){
+                	$("div.subject").hide();
+                }
+                else{
+                    $("div.subject").text('Escolha um assunto');
+                }
                 return false;
             }
             _self.sendForm(email, name, subject, message);
@@ -227,12 +239,20 @@
             });
             $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
             .then((retorno)=>{
-               console.log(retorno);
-               email = "";
-               name =  "";
-               subject = "";
-               message = "";
-               alert("Formulario enviado com sucesso");
+                console.log(retorno);
+
+                $("div.email").hide();
+                $("div.name").hide();
+                $("div.subject").hide();
+
+                $("#mail").val("");
+                $("#name").val("");
+                $("#subject").val("");
+                $("#message").val("");
+                setTimeout(()=>{
+                    alert("Formulario enviado com sucesso");
+                },1000);
+                
             });
         },
     }
