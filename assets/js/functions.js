@@ -284,18 +284,6 @@ let FormEmail = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function sliderInit() {
     $('.slider .slides').slick({
         dots: true,
