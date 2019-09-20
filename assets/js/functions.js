@@ -37,53 +37,6 @@ let Menu = {
         return _html;
     }
 }
-
-let Banner = {
-    init: function(){
-        let _self = this;
-
-        _self.getBanners();
-    },
-    getBanners: function(){
-        let _self = this;
-
-        $.get('http://localhost:5000/json/banner.json').then((response) => {
-            _self.listBanners(response);
-        });
-    },
-    listBanners: function(banners){
-        banners.map((response) => {
-            let html = `<div class="slide">
-                <div class="shell">
-                    <div class="cols">
-                        <div class="col col--1of2">
-                            <h1>Verdadeira Tradição corebiz</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut</p>
-
-                            <a href="#" class="btn btn--red">
-                                <span>VER A COLEÇÃO</span>
-
-                                <i class="ico-dot"></i>
-                            </a>
-                        </div><!-- /.col col-/-1of2 -->
-
-                        <div class="col col--1of2">
-                            <img src="assets/images/temp/slider-image1.jpg" alt="" class="hidden-xs hidden-sm">
-
-                            <img src="assets/images/temp/slider-image1-mobile.jpg" alt="" class="hidden-md hidden-lg">
-                        </div><!-- /.col col-/-1of2 -->
-                    </div><!-- /.cols -->
-                </div><!-- /.shell -->
-            </div><!-- /.slide -->`
-
-            $('.slides-banner').append(html);
-
-        });
-
-        sliderInit();
-    }
-}
-
 let Vitrine = {
     init: function(){
         this.getVitrine();
@@ -151,7 +104,6 @@ let Vitrine = {
         });
     }
 }
-
 let Form = {
     init: function(){
         let _self = this;
@@ -189,7 +141,48 @@ let Form = {
         });
     },
 }
+let Banner = {
+    init: function(){
+        let _self = this;
 
+        _self.getBanners();
+    },
+    getBanners: function(){
+        let _self = this;
+
+        $.get('http://localhost:5000/json/banner.json').then((response) =>{
+            _self.listBanners(response);
+        });
+    },
+    listBanners: function(banners){
+        banners.map((response) => {
+            let html = `<div class="slide">
+                <div class="shell">
+                    <div class="cols">
+                        <div class="col col--1of2">
+                            <h1>Verdadeira Tradição corebiz</h1>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut</p>
+
+                            <a href="#" class="btn btn--red">
+                                <span>VER A COLEÇÃO</span>
+
+                                <i class="ico-dot"></i>
+                            </a>
+                        </div><!-- /.col col-/-1of2 -->
+
+                        <div class="col col--1of2">
+                            <img src="assets/images/temp/slider-image1.jpg" alt="" class="hidden-xs hidden-sm">
+
+                            <img src="assets/images/temp/slider-image1-mobile.jpg" alt="" class="hidden-md hidden-lg">
+                        </div><!-- /.col col-/-1of2 -->
+                    </div><!-- /.cols -->
+                </div><!-- /.shell -->
+            </div><!-- /.slide -->`;
+            $('.slide-banner').append(html);
+        });
+        sliderInit();
+    }
+}
 let FormContato = {
     init: function(){
         let _self = this;
@@ -208,13 +201,25 @@ let FormContato = {
         let subject = $("#subject").val();
         let message = $("#message").val();
 
-        console.log(email);
-        console.log(name);
-        console.log(subject);
-        console.log(message);
-
         if(email.length == 0 || name.length == 0 || subject.length == 0){
-            $(".error").text('O campos campos Email, Nome e Assunto são obrigatorios');
+            if(email == 0){
+                $("div.email").text('Digite seu email');
+            }
+            else{
+                $("div.email").hide();
+            }
+            if(name == 0){
+                $("div.name").text('Digite seu nome');
+            }
+            else{
+                $("div.name").hide();
+            }
+            if(subject == 0){
+                $("div.subject").text('Insira um assunto');
+            }
+            else{
+                $("div.subject").hide();
+            }
             return false;
         }
         _self.sendForm(email, name, subject, message);
@@ -222,9 +227,9 @@ let FormContato = {
     sendForm: function(email, name, subject, message){
         let body = {
             "email": email,
-            "name":name,
-            "subject":subject,
-            "message":message
+            "name": name,
+            "subject": subject,
+            "message": message
         }
         $.ajaxSetup({
            headers: {
@@ -234,12 +239,23 @@ let FormContato = {
         });
         $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
         .then((retorno)=>{
-           console.log(retorno);
-           email = "";
-           name =  "";
-           subject = "";
-           message = "";
-           alert("Formulario enviado com sucesso");
+            console.log(retorno);
+
+            $("div.email").hide();
+            $("div.name").hide();
+            $("div.subject").hide();
+
+            $("#mail").val("");
+                $("#name").val("");
+                $("#subject").val("");
+                $("#message").val("");
+
+            setTimeout(() =>{
+                alert("Formulario enviado com sucesso");
+            }, 1000
+            
+            );
+            
         });
     },
 }
@@ -285,7 +301,6 @@ function sliderInit() {
     });
     imageZoom();
 }
-
 function imageZoom() {
     $('.product__zoom').each(function () {
         var $this = $(this);
