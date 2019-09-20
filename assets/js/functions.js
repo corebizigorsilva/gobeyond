@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7817fc584a6b741285c684f9850087ca972f6178
 $(document).ready(function () {
     Menu.init();
     Banner.init();
@@ -132,6 +136,10 @@ let Vitrine = {
                                             <strong>`+ price + `</strong>
                                         </li>
                                     </ul><!-- /.list-price -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7817fc584a6b741285c684f9850087ca972f6178
                                     <a href="`+ skusAvailable[0].sellers[0].addToCartLink +`" target="_blank"> Comprar </a> 
                                                         
                                 </div><!-- /.product__content -->
@@ -193,7 +201,6 @@ let Form = {
     },
 
 }
-/*MINHA CONTRIBIÇÃO AO CODIGO*/
 let FormContato = {
     init:function(){
         let _self = this;
@@ -214,7 +221,7 @@ let FormContato = {
 
         if(email.length == 0 || name.length == 0 || subject.length == 0){
             $('.error').text("Todos os campos são obrigatórios");
-            return false;
+                return false;
         }
         
         _self.sendFormContato(email, name, subject,message);
@@ -240,6 +247,7 @@ let FormContato = {
             $('#name').val("");
             $('#subject').val("");
             $('message').val("");
+            console.log(retorno);
         });
     },  
 }
