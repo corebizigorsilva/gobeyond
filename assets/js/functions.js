@@ -219,6 +219,7 @@ let Form = {
 let Contato = {
     init: function () {
         let _self = this;
+        //
 
         $('#form-contato').submit((evt) => {
             evt.preventDefault();
@@ -233,14 +234,23 @@ let Contato = {
         let message = $('#message').val();
 
         if (email.length == 0){
-            $('.error1').text("O campo email é obrigatório");
+            $('.error').text("O campo email é obrigatório");
+            $(".error").show();
+            $(".error1").hide();
+            $(".error2").hide();
             return false;      
         }else{
             if (name.length == 0){
-                $('.error2').text("O campo nome é obrigatório");
+                $('.error1').text("O campo nome é obrigatório");
+                $(".error").hide();
+                $(".error1").show();
+                $(".error2").hide();
                 return false;
             }if (subject.length == 0){
-                $('.error3').text("O campo assunto é obrigatório");
+                $('.error2').text("O campo assunto é obrigatório");
+                $(".error").hide();
+                $(".error1").hide();
+                $(".error2").show();
                 return false;
             }
         }
