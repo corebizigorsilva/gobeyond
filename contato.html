@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
     <title>Loja COREBIZ - desktop  mobile</title>
 
@@ -11,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="assets/vendor/slick-1.8.1/slick.css">
     <link rel="stylesheet" type="text/css" href="assets/vendor/selectric/selectric.css">
     <link rel="stylesheet" type="text/css" href="assets/css/bundle.css">
+    
 </head>
 
 <style>
@@ -51,6 +54,7 @@
                         <li>
                             <a href="#">Minha conta</a>
                         </li>
+                        
                     </ul>
                 </nav><!-- /.nav-utilities -->
             </div><!-- /.shell -->
@@ -62,6 +66,7 @@
                     <img src="assets/images/brand/black.svg" alt="">
                 </a>
 
+                
                 <div class="nav-wrapper">
                     <nav class="nav">
                         <ul>
@@ -323,29 +328,52 @@
     <section class="section-subscribe send-contact">
         <div class="shell">
             <div class="shell">
-                <h2>Entre em contato</h2>
+                <h2>Contato</h2>
             </div><!-- /.section__head -->
 
             <div class="section__body">
+
+                    <div class="shell2">
+                            <div class="shell2">
+                                <h3>Ficou com alguma dúvida? Deixe aqui sua mensagem que iremos te ajudar!</h3>
+                            </div>
+                            
+                            
+                                  
+
                 <div class="subscribe">
                     <form action="?" method="post" id="form-contato" class="form-contato">
 
-                        <input type="email" id="mail" name="mail" value="" placeholder="E-mail" class="subscribe__field">
+                        <!--<input type="email" id="mail" name="mail" value="" placeholder="E-mail" class="subscribe__field">
 
                         <input type="text" id="name" name="name" value="" placeholder="Nome" class="subscribe__field">
 
                         <input type="text" id="subject" name="name" value="" placeholder="Assunto" class="subscribe__field">
 
-                        <textarea type="text" id="message" name="name" value="" placeholder="Mensagem" class="subscribe__field"></textarea>
+                        <textarea type="text" id="message" name="name" value="" placeholder="Mensagem" class="subscribe__field"></textarea>-->
+                        
+                        <input type="text"  id="name" name="nome" value="" class="form-contato" placeholder="Digite aqui seu NOME COMPLETO">
+                        
+                        <span class="help-block">Ex: Silva Costa <i style='font-size:24px' class='far'>&#xf118;</i> </span>
 
+                        <input type="text" id="mail" name="mail" value="" class="form-contato" placeholder="Digite aqui seu E-MAIL">
+                        <span class="help-block" >Ex: silvacosta@hotmail.com <i style='font-size:24px' class='fas'>&#xf674;</i> </span>
+                        
+                        <input type="text" name="name" id="subject" value="" class="form-contato" placeholder="Digite aqui o ASSUNTO" > 
+                        <span class="help-block" >Ex: Dúvida  <i style='font-size:24px' class='far'>&#xf086;</i> </span>
+                        
+                        <textarea type="text" name = "name" rows="6" id="message" value="" class="form-contato" placeholder="Digite aqui sua MENSAGEM"></textarea>
+                        
                         <button type="submit" class="btn subscribe__btn">
+                            
                             <span>CADASTRAR</span>
 
-                            <i class="ico-dot"></i>
+                        
+                            
                         </button>
 
                         <div class="error">
-
+                                
                         </div>
                     </form>
                 </div><!-- /.subscribe -->

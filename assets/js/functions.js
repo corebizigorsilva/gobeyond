@@ -193,7 +193,7 @@ let Form = {
     },
 
 }
-
+/*MINHA CONTRIBIÇÃO AO CODIGO*/
 let FormContato = {
     init:function(){
         let _self = this;
@@ -214,7 +214,7 @@ let FormContato = {
 
         if(email.length == 0 || name.length == 0 || subject.length == 0){
             $('.error').text("Todos os campos são obrigatórios");
-                return false;
+            return false;
         }
         
         _self.sendFormContato(email, name, subject,message);
@@ -235,7 +235,11 @@ let FormContato = {
         });
         $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', 
         JSON.stringify(body)).then((retorno) => {
-            console.log(retorno);
+            $('.error').text("Cadastrado com sucesso");
+            $('#mail').val("");
+            $('#name').val("");
+            $('#subject').val("");
+            $('message').val("");
         });
     },  
 }

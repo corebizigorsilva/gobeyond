@@ -692,8 +692,7 @@ ul:last-child,
 ol:last-child,
 dl:last-child,
 table:last-child,
-blockquote:last-child {
-  margin-bottom: 0; }
+
 h1,
 h2,
 h3,
@@ -4635,6 +4634,7 @@ nav ol {
       margin-bottom: 0; }
 .section-image .section__body {
     padding-top: 21px;
+
     /*Mobile*/ }
 @media (max-width: 1024px) {
       .section-image .section__body {
@@ -6453,4 +6453,29 @@ nav ol {
 #message{
     height: 100px;
     margin-bottom: 100px;
+}
+/*MINHA INCLUSAO*/
+.form-contato {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+h3{
+  text-align: center;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.help-block{
+  margin-left:50px;
+  margin-bottom: 10px;
 }
