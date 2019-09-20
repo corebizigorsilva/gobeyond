@@ -203,59 +203,81 @@ let Form = {
         });
     },
 }
+
 let FormContato = {
-    init: function(){
-        let _self = this;
+        init: function(){
+            let _self = this;
 
-        $('#form-contato').submit((evt)=>{
-            evt.preventDefault();
+            $('#form-contato').submit((evt)=>{
+                evt.preventDefault();
 
-            _self.validateForm();
-        });
-    },
-    validateForm: function(){
-        let _self = this;
+                _self.validateForm();
+            });
+        },
+        validateForm: function(){
+            let _self = this;
 
-        let email = $("#mail").val();
-        let name = $("#name").val();
-        let subject = $("#subject").val();
-        let message = $("#message").val();
+            let email = $("#mail").val();
+            let name = $("#name").val();
+            let subject = $("#subject").val();
+            let message = $("#message").val();
+            
+            
+            if(email.length == 0 || name.length == 0 || subject.length == 0){
+                if(email != ""){
+                	$("div.email").hide();
+                }else{
+                    $("div.email").text('O digite seu email');
+                }
+                if(name != ""){
+                	$("div.name").hide();
+                }
+                else{
+                    $("div.name").text('O digite seu nome');
+                }
+                if(subject != ""){
+                	$("div.subject").hide();
+                }
+                else{
+                    $("div.subject").text('Escolha um assunto');
+                }
+                return false;
+            }
+            
+            _self.sendForm(email, name, subject, message);
+        },
+        sendForm: function(email, name, subject, message){
+            let body = {
+                "email": email,
+                "name":name,
+                "subject":subject,
+                "message":message
+            }
+            $.ajaxSetup({
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Accept': 'application/vnd.vtex.ds.v10+json'
+               } 
+            });
+            $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
+            .then((retorno)=>{
+                console.log(retorno);
 
-        console.log(email);
-        console.log(name);
-        console.log(subject);
-        console.log(message);
+                $("div.email").hide();
+                $("div.name").hide();
+                $("div.subject").hide();
 
-        if(email.length == 0 || name.length == 0 || subject.length == 0){
-            $(".error").text('O campos campos Email, Nome e Assunto são obrigatorios');
-            return false;
-        }
-        _self.sendForm(email, name, subject, message);
-    },
-    sendForm: function(email, name, subject, message){
-        let body = {
-            "email": email,
-            "name":name,
-            "subject":subject,
-            "message":message
-        }
-        $.ajaxSetup({
-           headers: {
-               'Content-Type': 'application/json',
-               'Accept': 'application/vnd.vtex.ds.v10+json'
-           } 
-        });
-        $.post('https://corebiz.vtexcommercestable.com.br/api/dataentities/tc/documents', JSON.stringify(body))
-        .then((retorno)=>{
-           console.log(retorno);
-           email = "";
-           name =  "";
-           subject = "";
-           message = "";
-           alert("Formulario enviado com sucesso");
-        });
-    },
-}
+                $("#mail").val("");
+                $("#name").val("");
+                $("#subject").val("");
+                $("#message").val("");
+                setTimeout(()=>{
+                    alert("Formulario enviado com sucesso");
+                },2000);
+                
+            });
+        },
+    }
 
 function sliderInit() {
     $('.slider .slides').slick({
