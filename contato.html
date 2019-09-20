@@ -335,10 +335,10 @@
                         <div class="error"></div>
                         <input type="text" id="name" name="name" value="" placeholder="Nome" class="subscribe__field">
                         <br>
-                        <div class="error2"></div>
+                        <div class="error1"></div>
                         <input type="text" id="subject" name="name" value="" placeholder="Assunto" class="subscribe__field">
                         <br>
-                        <div class="error3"></div>
+                        <div class="error2"></div>
                         <textarea type="text" id="message" name="name" value="" placeholder="Mensagem" class="subscribe__field"></textarea>
                         
                         <button type="submit" class="btn subscribe__btn">
@@ -346,6 +346,21 @@
 
                             <i class="ico-dot"></i>
                         </button>
+
+                        <style>
+                            input[type="email"]:focus, input[type="text"]:focus, textarea[type="text"]:focus
+                            {
+                                background-color: #9999ff/*#99d6ff*/;
+                                border-radius: 3px 3px 0px 0px;
+                                transition: 0.5s linear;
+                                color: #f1f1f1;
+                                /*transform-origin: bottom;*/
+                            }
+                            .error, .error1, .error2 
+                            {
+                                color: #ff5c33;
+                            }
+</style>
 
                         
 
